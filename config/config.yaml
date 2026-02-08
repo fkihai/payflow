@@ -1,0 +1,29 @@
+app:
+  name: payflow
+  environment: development
+  timezone: Asia/Jakarta
+
+server:
+  http:
+    host: 0.0.0.0
+    port: 8080
+    read_timeout: 10
+    write_timeout: 10
+
+database:
+  primary:
+    driver: postgres
+    host: localhost
+    ssl_mode: disable
+
+payment_gateway:
+  provider: mock
+  webhook_path: /webhook/payment
+  environment: sandbox
+
+message_queue:
+  type: rabbitmq
+  rabbitmq:
+    host: localhost
+    port: 5672
+    vhost: /
