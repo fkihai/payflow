@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/joho/godotenv"
 	"gopkg.in/yaml.v3"
 )
 
@@ -35,6 +36,7 @@ type HttpServerConfig struct {
 type DatabaseConfig struct {
 	Primary PrimaryDatabaseConfig `yaml:"primary"`
 }
+
 type PrimaryDatabaseConfig struct {
 	Driver   string `yaml:"driver"`
 	Host     string `yaml:"host"`
@@ -97,9 +99,11 @@ func LoadConfig() (*Config, error) {
 	}
 
 	// load env
+	godotenv.Load()
+
 	cfg.Database.Primary.Port = getInt("DB_PORT", 5432)
-	cfg.Database.Primary.Name = getString("DB_NAME", "app")
-	cfg.Database.Primary.User = getString("DB_USER", "admin")
+	cfg.Database.Primary.Name = getString("DB_NAME", "payflow")
+	cfg.Database.Primary.User = getString("DB_USER", "dev")
 	cfg.Database.Primary.Password = getString("DB_PASSWORD", "root")
 
 	return cfg, nil

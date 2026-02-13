@@ -20,8 +20,8 @@ type Transaction struct {
 	OrderId   string            `db:"order_id"`
 	Amount    int               `db:"amount"`
 	Status    TransactionStatus `db:"status"`
-	CreatedAt time.Time         `db:"created_at"`
 	ExpiresAt int               `db:"expires_at"`
-	PaidAt    time.Time         `db:"paid_at"`
+	PaidAt    *time.Time        `db:"paid_at"`
+	CreatedAt time.Time         `db:"created_at"`
 	UpdatedAt time.Time         `db:"updated_at"`
 }
