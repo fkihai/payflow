@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/fkihai/payflow/internal/domain/database"
 	"github.com/fkihai/payflow/internal/infrastructure/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"
@@ -47,7 +48,7 @@ func (conn *PostgresConnection) Connect() (*sql.DB, error) {
 	return db, nil
 }
 
-func NewPostgresConnection(cfg *config.DatabaseConfig) *PostgresConnection {
+func NewPostgresConnection(cfg *config.DatabaseConfig) database.Connection {
 	return &PostgresConnection{
 		cfg: cfg,
 	}

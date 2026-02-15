@@ -48,9 +48,11 @@ type PrimaryDatabaseConfig struct {
 }
 
 type PaymentGatewayConfig struct {
-	Provider    string `yaml:"provider"`
-	WebhookPath string `yaml:"webhook_path"`
-	Env         string `yaml:"environment"`
+	WebhookPath   string `yaml:"webhook_path"`
+	Env           string `yaml:"environment"`
+	SandBoxUrl    string `yaml:"sandbox_url"`
+	ProductionUrl string `yaml:"production_url"`
+	ServerKey     string
 }
 
 type MessageQueueConfig struct {
@@ -105,6 +107,8 @@ func LoadConfig() (*Config, error) {
 	cfg.Database.Primary.Name = getString("DB_NAME", "payflow")
 	cfg.Database.Primary.User = getString("DB_USER", "dev")
 	cfg.Database.Primary.Password = getString("DB_PASSWORD", "root")
+
+	cfg.Peyment.ServerKey = getString("PAYMENT_SERVER_KEY", "")
 
 	return cfg, nil
 }

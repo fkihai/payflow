@@ -17,9 +17,10 @@ database:
     ssl_mode: disable
 
 payment_gateway:
-  provider: mock
   webhook_path: /webhook/payment
   environment: sandbox
+  sandbox_url: https://api.sandbox.midtrans.com
+  production_url: https://api.midtrans.com
 
 message_queue:
   type: rabbitmq

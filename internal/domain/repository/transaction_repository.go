@@ -1,8 +1,12 @@
 package repository
 
-import e "github.com/fkihai/payflow/internal/domain/entity"
+import (
+	"context"
+
+	e "github.com/fkihai/payflow/internal/domain/entity"
+)
 
 type TransactionRepository interface {
-	Create(trx e.Transaction) error
-	Update(trx e.Transaction) error
+	Create(context context.Context, trx e.Transaction) (*e.Transaction, error)
+	Update(context context.Context, trx e.Transaction) (*e.Transaction, error)
 }

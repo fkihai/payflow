@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/fkihai/payflow/internal/domain/database"
 	"github.com/pressly/goose/v3"
 )
 
@@ -28,7 +29,7 @@ func (m *PostgresMigrations) MigrateDown() error {
 	return nil
 }
 
-func NewPostgresMigrations(db *sql.DB) *PostgresMigrations {
+func NewPostgresMigrations(db *sql.DB) database.Migrations {
 	return &PostgresMigrations{
 		db: db,
 	}

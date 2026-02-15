@@ -18,10 +18,11 @@ const (
 type Transaction struct {
 	ID        uuid.UUID         `db:"id"`
 	OrderId   string            `db:"order_id"`
-	Amount    int               `db:"amount"`
+	Amount    int64             `db:"amount"`
 	Status    TransactionStatus `db:"status"`
 	ExpiresAt int               `db:"expires_at"`
 	PaidAt    *time.Time        `db:"paid_at"`
+	QrUrl     string            `db:"qr_url"`
 	CreatedAt time.Time         `db:"created_at"`
 	UpdatedAt time.Time         `db:"updated_at"`
 }
