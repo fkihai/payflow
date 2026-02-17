@@ -2,69 +2,46 @@
 
 ```
 payflow/
-├── cmd/
-│   ├── api/
+├── .env                     # Environment variables (fill according to .env.example)
+├── .env.example             # Template environment variables
+├── go.mod                   # Go module file
+├── go.sum                   # Go module dependencies checksum
+│
+├── cmd/                     # Entry points / main applications
+│   ├── api/                 # HTTP API server
 │   │   └── main.go
-│   └── worker/
+│   ├── worker/              # Background worker applications
+│   │   └── main.go
+│   └── migration/           # Database migration CLI
 │       └── main.go
 │
-├── config/
+├── config/                  # Static configuration files
 │   └── config.yaml
 │
-├── internal/
-│   ├── domain/
-│   │   ├── entity/
-│   │   │   ├── transaction.go
-│   │   │   ├── payment.go
-│   │   │   └── device.go
-│   │   │
-│   │   └── repository/
-│   │       ├── transaction_repository.go
-│   │       └── payment_repository.go
+├── internal/                # Core layers (Clean Architecture)
+│   ├── entity/              # Domain entities
+│   │   └── *.go
 │   │
-│   ├── usecase/
-│   │   ├── payment/
-│   │   │   ├── create_qris.go
-│   │   │   ├── confirm_payment.go
-│   │   │   └── timeout_payment.go
-│   │   │
-│   │   └── device/
-│   │       └── activate_device.go
+│   ├── valueobject/         # Domain value objects
+│   │   └── *.go
 │   │
-│   ├── delivery/
-│   │   ├── http/
-│   │   │   ├── handler/
-│   │   │   │   ├── payment_handler.go
-│   │   │   │   └── webhook_handler.go
-│   │   │   └── router.go
-│   │   │
-│   │   └── worker/
-│   │       └── payment_worker.go
+│   ├── usecase/             # Application / business rules
+│   │   └── <feature>/       # Organized per feature (payment, device, etc.)
+│   │       ├── interface.go
+│   │       └── service.go
 │   │
-│   └── infrastructure/
-│       ├── config/
-│       │   └── loader.go
-│       │
-│       ├── db/
-│       │   └── postgres/
-│       │       └── transaction_repo.go
-│       │
-│       ├── mq/
-│       │   └── rabbitmq/
-│       │       └── publisher.go
-│       │
-│       └── payment_gateway/
-│           └── mock/
-│               └── client.go
+│   ├── delivery/            # Interface adapters
+│   │   ├── http/            # HTTP handlers & routers
+│   │   └── worker/          # Background job adapters
+│   │
+│   └── infrastructure/      # External frameworks & services
+│       ├── config/          # Config loader & helpers
+│       ├── db/              # Database implementations (repository)
+│       ├── mq/              # Message queue implementations
+│       └── gateway/         # External payment gateway clients
 │
-├── pkg/
-│   └── logger/
-│       └── logger.go
+├── pkg/                     # Shared libraries (cross-layer safe)
+│   └── logger/              # Logging utility
 │
-├── migrations/
-│   └── 001_create_transactions.sql
-│
-├── go.mod
-└── go.sum
-
+└── migrations/              # Database migration files
 ```

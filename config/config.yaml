@@ -19,8 +19,8 @@ database:
 payment_gateway:
   webhook_path: /webhook/payment
   environment: sandbox
-  sandbox_url: https://api.sandbox.midtrans.com
-  production_url: https://api.midtrans.com
+  sandbox_url: https://api.sandbox.midtrans.com/v2/charge
+  production_url: https://api.midtrans.com/v2/charge
 
 message_queue:
   type: rabbitmq

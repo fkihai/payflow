@@ -8,11 +8,18 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type PaymentEnv string
+
+const (
+	PaymentEnvSandbox    PaymentEnv = "sandbox"
+	PaymentEnvProduction PaymentEnv = "production"
+)
+
 type Config struct {
 	App          AppConfig            `yaml:"app"`
 	Server       ServerConfig         `yaml:"server"`
 	Database     DatabaseConfig       `yaml:"database"`
-	Peyment      PaymentGatewayConfig `yaml:"payment_gateway"`
+	Payment      PaymentGatewayConfig `yaml:"payment_gateway"`
 	MessageQueue MessageQueueConfig   `yaml:"message_queue"`
 }
 
@@ -48,10 +55,10 @@ type PrimaryDatabaseConfig struct {
 }
 
 type PaymentGatewayConfig struct {
-	WebhookPath   string `yaml:"webhook_path"`
-	Env           string `yaml:"environment"`
-	SandBoxUrl    string `yaml:"sandbox_url"`
-	ProductionUrl string `yaml:"production_url"`
+	WebhookPath   string     `yaml:"webhook_path"`
+	Env           PaymentEnv `yaml:"environment"`
+	SandBoxUrl    string     `yaml:"sandbox_url"`
+	ProductionUrl string     `yaml:"production_url"`
 	ServerKey     string
 }
 
@@ -108,7 +115,7 @@ func LoadConfig() (*Config, error) {
 	cfg.Database.Primary.User = getString("DB_USER", "dev")
 	cfg.Database.Primary.Password = getString("DB_PASSWORD", "root")
 
-	cfg.Peyment.ServerKey = getString("PAYMENT_SERVER_KEY", "")
+	cfg.Payment.ServerKey = getString("PAYMENT_SERVER_KEY", "")
 
 	return cfg, nil
 }

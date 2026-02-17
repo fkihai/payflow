@@ -1,5 +1,6 @@
 -- +goose Up
 -- +goose StatementBegin
+-- TODO: CLEAN UP
 SELECT 'up SQL query';
 ALTER TABLE IF EXISTS transactions
 ADD COLUMN qr_url TEXT NULL;
