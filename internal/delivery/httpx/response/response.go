@@ -12,13 +12,14 @@ type successResponse struct {
 }
 
 type errorResponse struct {
-	Success bool `json:"success" binding:"required"`
-	Error   any  `json:"error"`
+	Success bool   `json:"success" binding:"required"`
+	Error   string `json:"error"`
 }
 
 func toJson(w http.ResponseWriter, status int, body any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Accept", "application/json")
+	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(body)
 }
 
@@ -30,9 +31,9 @@ func SUCCESS(w http.ResponseWriter, status int, data any, meta map[string]any) {
 	})
 }
 
-func FAILED(w http.ResponseWriter, status int, errors any) {
+func FAILED(w http.ResponseWriter, status int, err error) {
 	toJson(w, status, errorResponse{
 		Success: false,
-		Error:   errors,
+		Error:   err.Error(),
 	})
 }

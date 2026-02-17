@@ -13,6 +13,7 @@ import (
 	"github.com/fkihai/payflow/internal/delivery/httpx/handler"
 	"github.com/fkihai/payflow/internal/infrastructure/config"
 	"github.com/fkihai/payflow/internal/infrastructure/db/postgres"
+	"github.com/fkihai/payflow/internal/infrastructure/payment/midtrans"
 	"github.com/fkihai/payflow/internal/usecase/payment"
 )
 
@@ -34,8 +35,13 @@ func main() {
 	defer db.Close()
 
 	r := postgres.NewPostgresTransactionRepositoy(db)
-	u := payment.NewPaymentUsecase(r)
-	h := handler.NewPaymentHandler(u, cfg.Peyment)
+
+	client := http.Client{}
+	g := midtrans.NewClientMidtrans(cfg.Payment, &client)
+
+	u := payment.NewPaymentUsecase(r, g)
+
+	h := handler.NewPaymentHandler(u)
 	router := httpx.Router(h)
 
 	svr := &http.Server{

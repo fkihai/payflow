@@ -1,4 +1,4 @@
-package database
+package db
 
 type Migrations interface {
 	MigrateUp() error

@@ -2,15 +2,15 @@ package midtrans
 
 import "github.com/fkihai/payflow/internal/domain/entity"
 
-type SnapResponse struct {
+type midtransResponse struct {
 	TransactionID     string                   `json:"transaction_id"`
 	OrderID           string                   `json:"order_id"`
 	GrossAmount       string                   `json:"gross_amount"`
 	TransactionStatus entity.TransactionStatus `json:"transaction_status"`
-	Actions           []ActionsResponse        `json:"actions"`
+	Actions           []actionsResponse        `json:"actions"`
 }
 
-type ActionsResponse struct {
+type actionsResponse struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
 }
