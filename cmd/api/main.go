@@ -15,6 +15,8 @@ import (
 	"github.com/fkihai/payflow/internal/infrastructure/db/postgres"
 	"github.com/fkihai/payflow/internal/infrastructure/gateway/midtrans"
 	paymentuc "github.com/fkihai/payflow/internal/usecase/payment"
+	"github.com/fkihai/payflow/pkg/logger"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -24,11 +26,17 @@ func main() {
 		return
 	}
 
+	errLog := logger.Init(&cfg.App)
+	if errLog != nil {
+		panic(errLog)
+	}
+	defer logger.Sync()
+
 	conn := postgres.NewPostgresConnection(&cfg.Database)
 
 	db, err := conn.Connect()
 	if err != nil {
-		fmt.Printf("cannot connect db, %v\n", err)
+		logger.Log.Error("cannot connect db", zap.String("error", err.Error()))
 		return
 	}
 
@@ -56,9 +64,10 @@ func main() {
 	}
 
 	go func() {
-		fmt.Printf("server starting, Addr: %s\n", ":2001")
+		logger.Log.Info("server starting", zap.String("addr", ":2001"))
 		if err := svr.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Println("server failed", err)
+			logger.Log.Error("server failed", zap.String("error", err.Error()))
 		}
 	}()
 
@@ -69,5 +78,5 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	_ = svr.Shutdown(ctx)
-	fmt.Println("server stopped")
+	logger.Log.Info("Server has been stoped")
 }
