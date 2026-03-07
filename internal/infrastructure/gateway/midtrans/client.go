@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/fkihai/payflow/internal/domain"
 	conf "github.com/fkihai/payflow/internal/infrastructure/config"
@@ -78,6 +79,8 @@ func (c *ClientMidtrans) CreateCharge(req *pu.GatewayRequest) (*pu.GatewayResult
 	return result, nil
 }
 
+// TODO: create log (issue: bad reques when trx is expire)
+
 func (c *ClientMidtrans) ConfirmCharge(ctx context.Context, payload []byte) (*pu.WebhookEvent, error) {
 
 	var req midtransWebhookEvent
@@ -85,7 +88,11 @@ func (c *ClientMidtrans) ConfirmCharge(ctx context.Context, payload []byte) (*pu
 		return nil, err
 	}
 
-	data := string(req.OID) + req.StatusCode + req.GrossAmount + c.Cfg.ServerKey
+	if err := req.OID.Validate(); err != nil {
+		return nil, err
+	}
+
+	data := req.OID.String() + req.StatusCode + req.GrossAmount + c.Cfg.ServerKey
 	gen := generateSignature(data)
 	if gen != req.Signature {
 		return nil, fmt.Errorf("invalid signature")
@@ -96,11 +103,21 @@ func (c *ClientMidtrans) ConfirmCharge(ctx context.Context, payload []byte) (*pu
 		return nil, err
 	}
 
+	var paidAt *time.Time
+	if req.TrxStatus == domain.ChargeSettlement {
+		loc, _ := time.LoadLocation("Asia/Jakarta")
+		t, err := time.ParseInLocation("2006-01-02 15:04:05", req.PaidAt, loc)
+		if err == nil {
+			paidAt = &t
+		}
+	}
+
 	return &pu.WebhookEvent{
 		ChgID:       req.TrxID,
 		ChgStatus:   req.TrxStatus,
-		ChgPaid:     req.PaidAt,
+		ChgPaid:     paidAt,
 		GrossAmount: amountInt,
+		OID:         req.OID,
 	}, nil
 
 }

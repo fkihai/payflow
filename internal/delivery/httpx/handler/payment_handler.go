@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/fkihai/payflow/internal/delivery/httpx/response"
 	pu "github.com/fkihai/payflow/internal/usecase/payment"
+	"github.com/fkihai/payflow/pkg/response"
 )
 
 type PaymentHandler struct {

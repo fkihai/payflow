@@ -41,19 +41,22 @@ func main() {
 
 	gen := paymentuc.QrisOID{}
 
-	u := paymentuc.NewCreateCharge(r, g, &gen)
+	chg := paymentuc.NewCreateCharge(r, g, &gen)
+	cnfm := paymentuc.NewConfirmCharge(r, g, &cfg.Payment)
 
-	h := handler.NewPaymentHandler(u)
-	router := httpx.Router(h)
+	ph := handler.NewPaymentHandler(chg)
+	wh := handler.NewWebhookHandler(cnfm)
+
+	router := httpx.Router(ph, wh)
 
 	svr := &http.Server{
-		Addr:        "127.0.0.1:2001",
+		Addr:        ":2001",
 		Handler:     router,
 		ReadTimeout: 5 * time.Second,
 	}
 
 	go func() {
-		fmt.Printf("server starting, Addr: %s\n", "127.0.0.1:2001")
+		fmt.Printf("server starting, Addr: %s\n", ":2001")
 		if err := svr.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Println("server failed", err)
 		}

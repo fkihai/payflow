@@ -9,10 +9,10 @@ import (
 type ChargeStatus string
 
 const (
-	ChargePending    ChargeStatus = "PENDING"
-	ChargeSettlement ChargeStatus = "SETTLEMENT"
-	ChargeExpired    ChargeStatus = "EXPIRED"
-	ChargeFailed     ChargeStatus = "FAILED"
+	ChargePending    ChargeStatus = "pending"
+	ChargeSettlement ChargeStatus = "settlement"
+	ChargeExpired    ChargeStatus = "expire"
+	ChargeFailed     ChargeStatus = "failed"
 )
 
 type Charge struct {

@@ -7,11 +7,12 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func Router(ph *handler.PaymentHandler) http.Handler {
+func Router(ph *handler.PaymentHandler, wh *handler.WebhookHandler) http.Handler {
 	r := chi.NewRouter()
 	r.Group(func(r chi.Router) {
 		r.Route("/api", func(r chi.Router) {
 			r.Post("/create-transaction", ph.CreateTransaction())
+			r.Post("/confirm-transaction", wh.ConfirmCharge())
 		})
 	})
 

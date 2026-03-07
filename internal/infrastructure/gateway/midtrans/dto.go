@@ -1,8 +1,6 @@
 package midtrans
 
 import (
-	"time"
-
 	"github.com/fkihai/payflow/internal/domain"
 )
 
@@ -27,5 +25,5 @@ type midtransWebhookEvent struct {
 	GrossAmount string              `json:"gross_amount"`
 	Signature   string              `json:"signature_key"`
 	Issuer      string              `json:"issuer"`
-	PaidAt      *time.Time          `json:"settlement_time"`
+	PaidAt      string              `json:"settlement_time"`
 }
